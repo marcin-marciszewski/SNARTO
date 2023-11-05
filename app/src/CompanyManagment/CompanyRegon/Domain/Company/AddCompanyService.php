@@ -29,20 +29,20 @@ class AddCompanyService
 
         $company = Company::create(
             CompanyId::generate(),
-            $companyDetails->dane->Regon ?? null,
-            $companyDetails->dane->Nazwa ?? null,
-            $companyDetails->dane->Wojewodztwo ?? null,
-            $companyDetails->dane->Powiat ?? null,
-            $companyDetails->dane->Gmina ?? null,
-            $companyDetails->dane->Miejscowosc ?? null,
-            $companyDetails->dane->KodPocztowy ?? null,
-            $companyDetails->dane->Ulica ?? null,
+            (string)$companyDetails->dane->RegonLink->a ?? null,
+            (string)$companyDetails->dane->Nazwa ?? null,
+            (string)$companyDetails->dane->Wojewodztwo ?? null,
+            (string)$companyDetails->dane->Powiat ?? null,
+            (string)$companyDetails->dane->Gmina ?? null,
+            (string)$companyDetails->dane->Miejscowosc ?? null,
+            (string)$companyDetails->dane->KodPocztowy ?? null,
+            (string)$companyDetails->dane->Ulica ?? null,
         );
 
         $this->companyRepository->store($company);
     }
 
-    private function makeCurl($field, $url)
+    private function makeCurl($field, $url): mixed
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -69,14 +69,14 @@ class AddCompanyService
         }
     }
 
-    private function login()
+    private function login(): mixed
     {
         $login = json_encode(["pKluczUzytkownika" => $this->key]);
         $result = $this->makeCurl($login, $this->loginTestUrl);
         return $result;
     }
 
-    private function fetchByRegon($regon)
+    private function fetchByRegon($regon): mixed
     {
         if ($this->session == null) {
             $this->session = $this->login();
